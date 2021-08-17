@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Results.css";
 import VideoCard from "./subComponents/VideoCard";
+import axios from "../axios";
+import Request from "../Request";
 
-function Results({movie}) {
+function Results() {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const request = await axios.get(Request.fetchActionMovies);
+      setMovies(request.data.results);
+      return request;
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div className="results">
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
-      <VideoCard movie={movie} />
+      {movies.map((movie) => (
+        <VideoCard movie={movie} />
+      ))}
     </div>
   );
 }
